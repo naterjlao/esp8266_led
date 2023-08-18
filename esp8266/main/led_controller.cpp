@@ -10,7 +10,6 @@ static void mode_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_cha
 static void mode_breathe_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
 static void mode_chaser(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
 
-
 // ----- PUBLIC FUNCTION IMPLEMENTATION ----- //
 
 LED::Controller::Controller(const int nLeds)
@@ -82,6 +81,8 @@ void LED::Controller::setMode(const LED::MODES mode)
     }
 }
 
+/// @brief Performs a single frame of LED rendering
+/// @param  
 void LED::Controller::render(void)
 {
     if (this->mode != 0)
@@ -96,6 +97,10 @@ void LED::Controller::render(void)
 
 // ----- PRIVATE FUNCTION IMPLEMENTATION ----- //
 
+/// @brief Utility Function, sets all LEDs to a color
+/// @param leds LED array
+/// @param nLeds Number of LEDs
+/// @param color Color
 static void set_all_leds(CRGB *leds, const int nLeds, const CRGB color)
 {
     for (size_t idx = 0; leds != 0 && idx < nLeds; ++idx)
@@ -104,6 +109,10 @@ static void set_all_leds(CRGB *leds, const int nLeds, const CRGB color)
     }
 }
 
+/// @brief LED Solid Mode. All LEDs set to static color and brightness
+/// @param leds LED array
+/// @param settings Mode Settings Parameters
+/// @param mode_change Mode Change Flag 
 static void mode_solid(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
 {
     if (leds != 0 && mode_change)
