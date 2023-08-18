@@ -6,9 +6,9 @@ void setup()
 {
     // Create the LED Controller object
     controller = new LED::Controller(300);
-    
+
 }
 void loop()
 {
-
+    controller->render();
 }
