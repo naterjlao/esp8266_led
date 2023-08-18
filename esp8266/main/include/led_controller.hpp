@@ -5,6 +5,8 @@
 
 namespace LED
 {
+    const int DATA_PIN = 15;
+
     /// @brief Defines the operational modes for the LED strip.
     enum MODES
     {
@@ -28,18 +30,29 @@ namespace LED
         CRGB::Green,
         CRGB::Blue,
         CRGB::Purple
-    }
-    
+    };
+
     class Controller
     {
     public:
         Controller(const int nLeds);
         ~Controller();
-        bool setMode(const MODES mode);
+        void render(void);
+        void setMode(const MODES mode, const CRGB color, const uint8_t brightness);
+
+        /// @todo privatize or remove
+        void setColor(const CRGB color);
+        void setBrightness(const uint8_t scale);
+        void show();
     private:
         int nLeds;
+        uint8_t data_pin;
         CRGB *leds;
-        MODE_FUNCTION current_mode;
+        uint8_t brightness;
+        MODE_FUNCTION mode;
+        bool mode_change;
+
+
         void mode_off(void);
         void mode_solid(void);
         void mode_breathe(void);
