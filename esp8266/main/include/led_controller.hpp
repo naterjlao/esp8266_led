@@ -18,8 +18,16 @@ namespace LED
         CHASER = 0x5
     };
 
-    /// @brief Function Pointer to the mode settings
-    typedef void (*MODE_FUNCTION)(void);
+    /// @brief Current LED Settings
+    typedef struct
+    {
+        int nLeds;
+        CRGB color;
+        uint8_t brightness;
+    } SETTINGS;
+
+    /// @brief Current Mode
+    typedef void (*MODE_FUNCTION)(CRGB*, const SETTINGS&, bool&);
 
     /// @brief Defines the list of colors used for CYCLE mode
     const CRGB COLORS[] =
@@ -37,28 +45,15 @@ namespace LED
     public:
         Controller(const int nLeds);
         ~Controller();
-        void render(void);
-        void setMode(const MODES mode, const CRGB color, const uint8_t brightness);
-
-        /// @todo privatize or remove
         void setColor(const CRGB color);
-        void setBrightness(const uint8_t scale);
-        void show();
+        void setBrightness(const uint8_t brightness);
+        void setMode(const MODES mode);
+        void render(void);
     private:
-        int nLeds;
-        uint8_t data_pin;
         CRGB *leds;
-        uint8_t brightness;
+        SETTINGS settings;
         MODE_FUNCTION mode;
         bool mode_change;
-
-
-        void mode_off(void);
-        void mode_solid(void);
-        void mode_breathe(void);
-        void mode_cycle(void);
-        void mode_breathe_cycle(void);
-        void mode_chaser(void);
     };
 };
 #endif
