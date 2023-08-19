@@ -16,6 +16,7 @@ LED::Controller::Controller(const int nLeds)
         this->leds = (CRGB *)malloc(sizeof(CRGB) * this->settings.nLeds);
         this->mode = 0;
         this->mode_change = false;
+        this->refresh = false;
 
         // Set up Fast LED and wake up the LEDs
         FastLED.addLeds<NEOPIXEL, LED::DATA_PIN>(this->leds, this->settings.nLeds);
@@ -48,8 +49,9 @@ void LED::Controller::render(void)
         // Invoke the Current Mode Function
         this->mode(this->leds, this->settings, this->mode_change);
         // Render LED Output
-        FastLED.show();
-        /// @todo for solid mode, don't refresh all the time
+        if (this->refresh) FastLED.show();
+        // For solid mode, don't refresh all the time
+        this->refresh = this->mode != LED::mode_solid;
     }
 }
 
@@ -68,6 +70,7 @@ void LED::Controller::setMode(const LED::MODES mode)
         this->settings.brightness = 0x00;
     case LED::SOLID:
         this->mode = LED::mode_solid;
+        this->refresh = true;
         break;
     case LED::BREATHE:
         this->mode = LED::mode_breathe;

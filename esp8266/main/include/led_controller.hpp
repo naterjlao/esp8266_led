@@ -22,6 +22,7 @@ namespace LED
         SETTINGS settings;
         MODE_FUNCTION mode;
         bool mode_change;
+        bool refresh;
     };
 };
 #endif
