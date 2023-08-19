@@ -26,9 +26,7 @@ namespace LED
         CRGB::Blue,
         CRGB::Purple
     };
-
-    void set_all_leds(CRGB *leds, const int nLeds, const CRGB color);
-
+    
     void mode_solid(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
     void mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
     void mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);

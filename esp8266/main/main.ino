@@ -19,11 +19,52 @@ IPAddress m_ip(239, 1, 1, 1);
 unsigned int m_port = 4000;
 /// @note this is more than necessary...
 char input_buffer[1024];
+static bool setup_wifi();
 
 // LED Controller Variables
 #define NUM_LEDS 300
 LED::Controller *controller = 0;
 
+// ----- MAIN FUNCTION IMPLEMENTATION ----- //
+
+/// @brief 
+void setup()
+{
+    // Serial output
+    /// @todo may be removed in future
+    Serial.begin(115200);
+    Serial.println();
+
+    /// @todo consider indicating red if WiFi configuration failed
+    bool wifi_status = setup_wifi();
+
+    // Create the LED Controller object
+    controller = new LED::Controller(NUM_LEDS);
+
+#if 1
+    Serial.println(sizeof(PROTOCOL::PAYLOAD));
+#endif
+}
+
+/// @brief 
+void loop()
+{
+    // Receive UDP payloads
+    PROTOCOL::PAYLOAD payload;
+    if ((udp.parsePacket() == sizeof(payload)) && (udp.read((char *)&payload, sizeof(payload)) > 0))
+    {
+        controller->receive(payload);
+        memset(&payload, 0, sizeof(payload));
+    }
+
+    // Render LEDs
+    controller->render();
+}
+
+// ----- PRIVATE FUNCTION IMPLEMENTATION ----- //
+
+/// @brief 
+/// @return 
 static bool setup_wifi()
 {
     bool status = true;
@@ -61,36 +102,4 @@ static bool setup_wifi()
     }
 
     return status;
-}
-
-void setup()
-{
-    // Serial output
-    /// @todo may be removed in future
-    Serial.begin(115200);
-    Serial.println();
-
-    /// @todo consider indicating red if WiFi configuration failed
-    bool wifi_status = setup_wifi();
-
-    // Create the LED Controller object
-    controller = new LED::Controller(NUM_LEDS);
-
-#if 1
-    Serial.println(sizeof(PROTOCOL::PAYLOAD));
-#endif
-}
-
-void loop()
-{
-    // Receive UDP payloads
-    PROTOCOL::PAYLOAD payload;
-    if ((udp.parsePacket() == sizeof(payload)) && (udp.read((char *)&payload, sizeof(payload)) > 0))
-    {
-        controller->receive(payload);
-        memset(&payload, 0, sizeof(payload));
-    }
-
-    // Render LEDs
-    controller->render();
 }

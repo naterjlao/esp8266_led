@@ -4,7 +4,7 @@
 /// @param leds LED array
 /// @param nLeds Number of LEDs
 /// @param color Color
-void LED::set_all_leds(CRGB *leds, const int nLeds, const CRGB color)
+static void set_all_leds(CRGB *leds, const int nLeds, const CRGB color)
 {
     for (size_t idx = 0; leds != 0 && idx < nLeds; ++idx)
     {
