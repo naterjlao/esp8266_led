@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>LED ROOM CONTROLLER</title>
+</head>
+
+<body>
+    <form action="http://192.168.4.70:8000/login" method="post">
+        <p>Username:</p>
+        <p><input type="text" name="name" /></p>
+        <p><input type="submit" name="submit" /></p>
+
+        <h1>MODE</h1>
+        <input type="radio" id="off" name="LED" value="off" checked>
+        <label for="off">OFF</label>
+        <input type="radio" id="solid" name="LED" value="solid">
+        <label for="solid">SOLID</label>
+        <input type="radio" id="breathe" name="LED" value="breathe">
+        <label for="breathe">BREATHE</label>
+        <input type="radio" id="breathe_cycle" name="LED" value="breathe_cycle">
+        <label for="breathe_cycle">BREATHE & CYCLE</label>
+        <input type="radio" id="chaser" name="LED" value="chaser">
+        <label for="chaser">CHASER</label>
+
+        <h1>SPEED</h1>
+        <label for="speed">Update rate (1..10): </label>
+        <input type="number" id="speed" name="speed" min="1" max="10">
+
+        <h1>COLOR</h1>
+        <p><input type="color" name="color" /></p>
+
+        <div><button type="SUBMIT">SET</button></button></div>
+    </form>
+</body>
+
+</html>
