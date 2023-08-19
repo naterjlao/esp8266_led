@@ -1,14 +1,15 @@
-#include "include/led_controller.hpp"
 #include <FastLED.h>
 
-// ----- PRIVATE FUNCTION PROTOTYPES ----- //
-static void set_all_leds(CRGB* leds, const int nLeds, const CRGB color);
+#include "include/led_controller.hpp"
 
-static void mode_solid(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
-static void mode_breathe(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
-static void mode_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
-static void mode_breathe_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
-static void mode_chaser(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change);
+// ----- PRIVATE FUNCTION PROTOTYPES ----- //
+static void set_all_leds(CRGB *leds, const int nLeds, const CRGB color);
+
+static void mode_solid(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
+static void mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
+static void mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
+static void mode_breathe_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
+static void mode_chaser(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change);
 
 // ----- PUBLIC FUNCTION IMPLEMENTATION ----- //
 
@@ -30,16 +31,40 @@ LED::Controller::Controller(const int nLeds)
         FastLED.setBrightness(0xFF);
         for (size_t idx = 0; idx < this->settings.nLeds; ++idx)
         {
+            delay(10); // this is needed for WDT
             this->leds[idx] = CRGB::White;
             FastLED.show();
         }
-        delay(1000);
 
+#if 0
         // Turn Off
         this->setMode(LED::OFF);
+#else
+        // testing playground
+        this->settings.color = CRGB::Amethyst;
+        this->settings.brightness = 0xFF;
+        this->setMode(LED::SOLID);
+#endif
     }
 }
 
+/// @brief Performs a single frame of LED rendering
+/// @param
+void LED::Controller::render(void)
+{
+    if (this->mode != 0)
+    {
+        // Invoke the Current Mode Function
+        this->mode(this->leds, this->settings, this->mode_change);
+        // Render LED Output
+        FastLED.show();
+        /// @todo for solid mode, don't refresh all the time
+    }
+}
+
+// ----- PRIVATE CLASS METHODS ----- //
+
+#if 0
 void LED::Controller::setColor(const CRGB color)
 {
     this->settings.color = color;
@@ -49,7 +74,7 @@ void LED::Controller::setBrightness(const uint8_t brightness)
 {
     this->settings.brightness = brightness;
 }
-
+#endif
 void LED::Controller::setMode(const LED::MODES mode)
 {
     /// @todo for now, invoke mode change if this is called
@@ -59,8 +84,8 @@ void LED::Controller::setMode(const LED::MODES mode)
     switch (mode)
     {
     case LED::OFF:
-        this->setColor(CRGB::Black);
-        this->setBrightness(0x0);
+        this->settings.color = CRGB::Black;
+        this->settings.brightness = 0x00;
     case LED::SOLID:
         this->mode = mode_solid;
         break;
@@ -81,20 +106,6 @@ void LED::Controller::setMode(const LED::MODES mode)
     }
 }
 
-/// @brief Performs a single frame of LED rendering
-/// @param  
-void LED::Controller::render(void)
-{
-    if (this->mode != 0)
-    {
-        // Invoke the Current Mode Function
-        this->mode(this->leds, this->settings, this->mode_change);
-        // Render LED Output
-        FastLED.show();
-        /// @todo for solid mode, don't refresh all the time
-    }   
-}
-
 // ----- PRIVATE FUNCTION IMPLEMENTATION ----- //
 
 /// @brief Utility Function, sets all LEDs to a color
@@ -112,8 +123,8 @@ static void set_all_leds(CRGB *leds, const int nLeds, const CRGB color)
 /// @brief LED Solid Mode. All LEDs set to static color and brightness
 /// @param leds LED array
 /// @param settings Mode Settings Parameters
-/// @param mode_change Mode Change Flag 
-static void mode_solid(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
+/// @param mode_change Mode Change Flag
+static void mode_solid(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     if (leds != 0 && mode_change)
     {
@@ -123,7 +134,7 @@ static void mode_solid(CRGB* leds, const LED::SETTINGS& settings, bool& mode_cha
     }
 }
 
-static void mode_breathe(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
+static void mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     static uint8_t brightness = 0x0;
     static bool increment = true;
@@ -145,17 +156,17 @@ static void mode_breathe(CRGB* leds, const LED::SETTINGS& settings, bool& mode_c
     FastLED.setBrightness(brightness);
 }
 
-static void mode_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
+static void mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
 }
 
-static void mode_breathe_cycle(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
+static void mode_breathe_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
 }
 
-static void mode_chaser(CRGB* leds, const LED::SETTINGS& settings, bool& mode_change)
+static void mode_chaser(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
 }

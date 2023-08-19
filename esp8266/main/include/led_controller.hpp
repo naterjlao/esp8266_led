@@ -45,11 +45,11 @@ namespace LED
     public:
         Controller(const int nLeds);
         ~Controller();
-        void setColor(const CRGB color);
-        void setBrightness(const uint8_t brightness);
-        void setMode(const MODES mode);
+        //void setColor(const CRGB color);
+        //void setBrightness(const uint8_t brightness);
         void render(void);
     private:
+        void setMode(const MODES mode);
         CRGB *leds;
         SETTINGS settings;
         MODE_FUNCTION mode;

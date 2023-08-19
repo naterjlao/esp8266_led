@@ -5,6 +5,7 @@
 #include "include/protocol.hpp"
 
 // LED Controller Libraries
+#include <FastLED.h>
 #include "include/led_controller.hpp"
 
 // UDP Ethernet Variables
@@ -20,6 +21,7 @@ unsigned int m_port = 4000;
 char input_buffer[1024];
 
 // LED Controller Variables
+#define NUM_LEDS 300
 LED::Controller *controller = 0;
 
 void setup()
@@ -62,7 +64,7 @@ void setup()
     }
 
     // Create the LED Controller object
-    controller = new LED::Controller(300);
+    controller = new LED::Controller(NUM_LEDS);
     /// @todo consider indicating red if WiFi configuration failed
 }
 
