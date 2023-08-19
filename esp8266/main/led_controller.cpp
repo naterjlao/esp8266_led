@@ -40,6 +40,13 @@ LED::Controller::Controller(const int nLeds)
     }
 }
 
+void LED::Controller::receive(const PROTOCOL::PAYLOAD& payload)
+{
+    Serial.println(payload.message_id);
+    Serial.println(payload.mode_cmd);
+    Serial.println(payload.rgba);
+}
+
 /// @brief Performs a single frame of LED rendering
 /// @param
 void LED::Controller::render(void)

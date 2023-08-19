@@ -69,16 +69,28 @@ void setup()
     /// @todo may be removed in future
     Serial.begin(115200);
     Serial.println();
-    
+
     /// @todo consider indicating red if WiFi configuration failed
     bool wifi_status = setup_wifi();
 
     // Create the LED Controller object
     controller = new LED::Controller(NUM_LEDS);
+
+#if 1
+    Serial.println(sizeof(PROTOCOL::PAYLOAD));
+#endif
 }
 
 void loop()
 {
-    /// @todo check for incoming packets, parse and send to the controller
+    // Receive UDP payloads
+    PROTOCOL::PAYLOAD payload;
+    if ((udp.parsePacket() == sizeof(payload)) && (udp.read((char *)&payload, sizeof(payload)) > 0))
+    {
+        controller->receive(payload);
+        memset(&payload, 0, sizeof(payload));
+    }
+
+    // Render LEDs
     controller->render();
 }

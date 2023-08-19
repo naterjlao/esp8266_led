@@ -14,8 +14,7 @@ namespace LED
     public:
         Controller(const int nLeds);
         ~Controller();
-        //void setColor(const CRGB color);
-        //void setBrightness(const uint8_t brightness);
+        void receive(const PROTOCOL::PAYLOAD& payload);
         void render(void);
     private:
         void setMode(const PROTOCOL::MODES mode);
