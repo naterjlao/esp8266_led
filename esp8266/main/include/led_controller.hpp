@@ -2,6 +2,7 @@
 #define __LED_CONTROLLER_HPP__
 
 #include <FastLED.h>
+#include "protocol.hpp"
 #include "led_lib.hpp"
 
 namespace LED
@@ -17,7 +18,7 @@ namespace LED
         //void setBrightness(const uint8_t brightness);
         void render(void);
     private:
-        void setMode(const MODES mode);
+        void setMode(const PROTOCOL::MODES mode);
         CRGB *leds;
         SETTINGS settings;
         MODE_FUNCTION mode;

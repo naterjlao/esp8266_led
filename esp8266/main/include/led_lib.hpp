@@ -5,17 +5,6 @@
 
 namespace LED
 {
-    /// @brief Defines the operational modes for the LED strip.
-    enum MODES
-    {
-        OFF = 0x0,
-        SOLID = 0x1,
-        BREATHE = 0x2,
-        CYCLE = 0x3,
-        BREATHE_CYCLE = 0x4,
-        CHASER = 0x5
-    };
-
     /// @brief Current LED Settings
     typedef struct
     {

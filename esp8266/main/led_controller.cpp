@@ -35,7 +35,7 @@ LED::Controller::Controller(const int nLeds)
         // testing playground
         this->settings.color = CRGB::Amethyst;
         this->settings.brightness = 0xFF;
-        this->setMode(LED::SOLID);
+        this->setMode(PROTOCOL::BREATHE);
 #endif
     }
 }
@@ -57,31 +57,31 @@ void LED::Controller::render(void)
 
 // ----- PRIVATE CLASS METHODS ----- //
 
-void LED::Controller::setMode(const LED::MODES mode)
+void LED::Controller::setMode(const PROTOCOL::MODES mode)
 {
     /// @todo for now, invoke mode change if this is called
-    mode_change = true;
+    this->mode_change = true;
+    this->refresh = true;
 
     // Set new Mode Function
     switch (mode)
     {
-    case LED::OFF:
+    case PROTOCOL::OFF:
         this->settings.color = CRGB::Black;
         this->settings.brightness = 0x00;
-    case LED::SOLID:
+    case PROTOCOL::SOLID:
         this->mode = LED::mode_solid;
-        this->refresh = true;
         break;
-    case LED::BREATHE:
+    case PROTOCOL::BREATHE:
         this->mode = LED::mode_breathe;
         break;
-    case LED::CYCLE:
+    case PROTOCOL::CYCLE:
         this->mode = LED::mode_cycle;
         break;
-    case LED::BREATHE_CYCLE:
+    case PROTOCOL::BREATHE_CYCLE:
         this->mode = LED::mode_breathe_cycle;
         break;
-    case LED::CHASER:
+    case PROTOCOL::CHASER:
         this->mode = LED::mode_chaser;
         break;
     default:
