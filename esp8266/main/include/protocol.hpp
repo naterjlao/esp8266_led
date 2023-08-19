@@ -6,7 +6,9 @@ namespace PROTOCOL
     typedef struct
     {
         uint32_t message_id;
-        /// @todo
+        uint16_t mode_cmd;
+        uint16_t spare;
+        uint32_t rgba;
     } PAYLOAD;
 }
 
