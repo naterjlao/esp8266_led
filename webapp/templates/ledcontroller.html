@@ -10,18 +10,12 @@
     <form action="http://192.168.4.70:8000/ledcontroller" method="post">
 
         <h1>MODE</h1>
-        <input type="radio" id="off" name="mode" value="off" checked>
-        <label for="off">OFF</label>
-        <input type="radio" id="solid" name="mode" value="solid">
-        <label for="solid">SOLID</label>
-        <input type="radio" id="breathe" name="mode" value="breathe">
-        <label for="breathe">BREATHE</label>
-        <input type="radio" id="cycle" name="mode" value="cycle">
-        <label for="solid">CYCLE</label>
-        <input type="radio" id="breathe_cycle" name="mode" value="breathe_cycle">
-        <label for="breathe_cycle">BREATHE & CYCLE</label>
-        <input type="radio" id="chaser" name="mode" value="chaser">
-        <label for="chaser">CHASER</label>
+        <input type="radio" name="mode" value="off" checked>OFF</input>
+        <input type="radio" name="mode" value="solid">SOLID</input>
+        <input type="radio" name="mode" value="breathe">BREATHE</input>
+        <input type="radio" name="mode" value="cycle">CYCLE</input>
+        <input type="radio" name="mode" value="breathe_cycle">BREATHE & CYCLE</input>
+        <input type="radio" name="mode" value="chaser">CHASER</input>
 
         <h1>COLOR</h1>
         <p><input type="color" name="color" /></p>
@@ -30,7 +24,7 @@
 
         <h1>RATE</h1>
         <label for="rate">Update rate (1..10): </label>
-        <input type="range" id="rate" name="rate" min="1" max="65535">
+        <input type="range" id="rate" name="rate" min="1" max="65535" value="{{ rate }}">
 
         <h1>INTENSITY</h1>
         <label for="brightness">Update rate (1..10): </label>

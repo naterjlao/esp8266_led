@@ -37,7 +37,7 @@ def ledcontroller():
         udp_controller.send(payload)
 
     # TODO data persistence on webpage
-    return render_template('ledcontroller.html')
+    return render_template('ledcontroller.html', rate = 2)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8000)
