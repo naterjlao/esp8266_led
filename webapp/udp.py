@@ -1,11 +1,6 @@
 import socket
 import protocol
 
-ip = "239.1.1.1"
-port = 4000
-# ref https://stackoverflow.com/questions/8437726/can-python-select-what-network-adapter-when-opening-a-socket
-INTERFACE = "192.168.4.35"
-
 class UDPMulticastIO:
     def __init__(self, ip: str, port: int, interface: str):
         self.ip = ip
@@ -21,11 +16,11 @@ class UDPMulticastIO:
 if __name__ == "__main__":
     IP = "239.1.1.1"
     PORT = 4000
-    INTERFACE = "192.168.4.54"
+    INTERFACE = "192.168.4.35"
     # NOTE: interface dependent on host machine
     # ref https://stackoverflow.com/questions/8437726/can-python-select-what-network-adapter-when-opening-a-socket
     
     udp_io = UDPMulticastIO(IP, PORT, INTERFACE)
-    msg = protocol.pack_payload(protocol.Mode.BREATHE_CYCLE, 128, 0xAA, 0xBB, 0xCC, 0xDD)
+    msg = protocol.pack_payload(protocol.Mode.BREATHE_CYCLE, 128, 0xAABBCC, 0xDD)
     udp_io.send(msg)
     
