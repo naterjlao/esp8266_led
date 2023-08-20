@@ -9,6 +9,7 @@ namespace LED
     typedef struct
     {
         int nLeds;
+        uint16_t rate;
         CRGB color;
         uint8_t brightness;
     } SETTINGS;

@@ -9,11 +9,16 @@ LED::Controller::Controller(const int nLeds)
     memset(&settings, 0, sizeof(settings));
     if (nLeds > 0)
     {
+        // Initialize Settings
         this->settings.nLeds = nLeds;
+        this->settings.rate = 0xFFFF;
         this->settings.color = CRGB::Black;
         this->settings.brightness = 0x0;
 
+        // Allocate LEDs
         this->leds = (CRGB *)malloc(sizeof(CRGB) * this->settings.nLeds);
+
+        // Set Current Mode and Reset Flags
         this->mode = 0;
         this->mode_change = false;
         this->refresh = false;
@@ -28,27 +33,38 @@ LED::Controller::Controller(const int nLeds)
             FastLED.show();
         }
 
-#if 0
-        // Turn Off
-        this->setMode(LED::OFF);
-#else
+        // Turn Off LEDs and set to Ready State
+        this->setMode(PROTOCOL::OFF);
+    }
+}
+
+/// @brief Parses the received payload and sets LED Controller settings based on the user request.
+/// @param payload 
+void LED::Controller::receive(const PROTOCOL::PAYLOAD& payload)
+{
+    /// @note the ESP8266 architecture is little-endian, byte-swapping is necessary
+    const uint32_t message_id = __ntohl(payload.message_id);
+    const PROTOCOL::MODES mode_cmd = payload.mode_cmd; // no byte-swap, 8-bit field
+    const uint16_t rate = __ntohs(payload.rate);
+    const uint32_t rgba = __ntohl(payload.rgba);
+
+    // Verify Message ID
+    if (PROTOCOL::MESSAGE_ID == message_id)
+    {
+#if 1
+        Serial.println(mode_cmd);
+        Serial.println(rate);
+        Serial.println(rgba);
         // testing playground
         this->settings.color = CRGB::Amethyst;
         this->settings.brightness = 0xFF;
         this->setMode(PROTOCOL::BREATHE);
 #endif
+        /// @todo set settings and mode
     }
 }
 
-void LED::Controller::receive(const PROTOCOL::PAYLOAD& payload)
-{
-    Serial.println(payload.message_id);
-    Serial.println(payload.mode_cmd);
-    Serial.println(payload.rgba);
-}
-
 /// @brief Performs a single frame of LED rendering
-/// @param
 void LED::Controller::render(void)
 {
     if (this->mode != 0)
@@ -64,6 +80,8 @@ void LED::Controller::render(void)
 
 // ----- PRIVATE CLASS METHODS ----- //
 
+/// @brief Helper Function, sets the Current Mode Function pointer based on Mode Label enum.
+/// @param mode Mode Label enum.
 void LED::Controller::setMode(const PROTOCOL::MODES mode)
 {
     /// @todo for now, invoke mode change if this is called

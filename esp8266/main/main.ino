@@ -40,10 +40,6 @@ void setup()
 
     // Create the LED Controller object
     controller = new LED::Controller(NUM_LEDS);
-
-#if 1
-    Serial.println(sizeof(PROTOCOL::PAYLOAD));
-#endif
 }
 
 /// @brief 
@@ -57,7 +53,7 @@ void loop()
         memset(&payload, 0, sizeof(payload));
     }
 
-    // Render LEDs
+    // Render LED Frame
     controller->render();
 }
 

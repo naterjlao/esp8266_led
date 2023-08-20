@@ -3,6 +3,8 @@
 
 namespace PROTOCOL
 {
+    const uint32_t MESSAGE_ID = 0x4C454443;
+
     /// @brief Defines the operational modes for the LED strip.
     /// @note The values here must match the UDP payload
     enum MODES: uint8_t

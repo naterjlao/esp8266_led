@@ -26,6 +26,10 @@ void LED::mode_solid(CRGB *leds, const LED::SETTINGS &settings, bool &mode_chang
     }
 }
 
+/// @brief LED Breathe Mode. All LEDs set to static color but brightness increases and decreases.
+/// @param leds LED array
+/// @param settings Mode Settings Parameters
+/// @param mode_change Mode Change Flag
 void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     static uint8_t brightness = 0x0;
@@ -39,6 +43,7 @@ void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_cha
         mode_change = false;
     }
 
+    /// @todo figure out rate-counter
     // Increase and Decrease Brightness
     brightness += increment ? 1 : -1;
     increment = (brightness == 0x00) ? true : increment;
@@ -48,16 +53,28 @@ void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_cha
     FastLED.setBrightness(brightness);
 }
 
+/// @brief LED Cycle Mode. All LEDs change colors but brightness is static.
+/// @param leds LED array
+/// @param settings Mode Settings Parameters
+/// @param mode_change Mode Change Flag
 void LED::mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
 }
 
+/// @brief LED Breathe+Cycle Mode. All LEDs change colors and brightness increases and decreases.
+/// @param leds LED array
+/// @param settings Mode Settings Parameters
+/// @param mode_change Mode Change Flag
 void LED::mode_breathe_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
 }
 
+/// @brief LED Chaser Mode. A section of LEDs "travels" across the LED strip.
+/// @param leds LED array
+/// @param settings Mode Settings Parameters
+/// @param mode_change Mode Change Flag
 void LED::mode_chaser(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     /// @todo
