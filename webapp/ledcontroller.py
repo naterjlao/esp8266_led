@@ -9,6 +9,15 @@ from flask import request
 from flask import Flask, redirect, url_for, request
 app = Flask(__name__)
 
+# TODO make this based off the enum
+MODE_LABELS = [
+    "off",
+    "breathe",
+    "cycle",
+    "breathe_cycle",
+    "chaser"
+]
+
 # Setup UDP Controller
 IP = "239.1.1.1"
 PORT = 4000
@@ -37,7 +46,9 @@ def ledcontroller():
         udp_controller.send(payload)
 
     # TODO data persistence on webpage
-    return render_template('ledcontroller.html', rate = 2)
+    return render_template('ledcontroller.html',
+                            modes=MODE_LABELS, current_mode="chaser",
+                            rate = 2)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8000)

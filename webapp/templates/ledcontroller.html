@@ -10,12 +10,13 @@
     <form action="http://192.168.4.70:8000/ledcontroller" method="post">
 
         <h1>MODE</h1>
-        <input type="radio" name="mode" value="off" checked>OFF</input>
-        <input type="radio" name="mode" value="solid">SOLID</input>
-        <input type="radio" name="mode" value="breathe">BREATHE</input>
-        <input type="radio" name="mode" value="cycle">CYCLE</input>
-        <input type="radio" name="mode" value="breathe_cycle">BREATHE & CYCLE</input>
-        <input type="radio" name="mode" value="chaser">CHASER</input>
+        {% for mode in modes %}
+            {% if mode == current_mode %}
+            <input type="radio" name="mode" value="{{ mode }}" checked>{{ mode }}</input>
+            {% else %}
+            <input type="radio" name="mode" value="{{ mode }}">{{ mode }}</input>
+            {% endif %}
+        {% endfor %}
 
         <h1>COLOR</h1>
         <p><input type="color" name="color" /></p>
