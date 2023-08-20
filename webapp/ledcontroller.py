@@ -1,7 +1,6 @@
 import protocol
 import udp
 
-
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -12,6 +11,7 @@ app = Flask(__name__)
 # TODO make this based off the enum
 MODE_LABELS = [
     "off",
+    "solid",
     "breathe",
     "cycle",
     "breathe_cycle",
@@ -31,10 +31,10 @@ def index():
 @app.route('/ledcontroller', methods = ['POST', 'GET'])
 def ledcontroller():
     if request.method == 'POST':
-        mode = protocol.parse_mode(request.form['mode'])
-        color = protocol.parse_color(request.form['color'])
-        rate = protocol.parse_rate(request.form['rate'])
-        brightness = protocol.parse_brightness(request.form['brightness'])
+        mode = request.form['mode']
+        color = request.form['color']
+        rate = request.form['rate']
+        brightness = request.form['brightness']
 
         # testing
         print(mode)
@@ -42,13 +42,26 @@ def ledcontroller():
         print(rate)
         print(brightness)
 
-        payload = protocol.pack_payload(mode, rate, color, brightness)
+        # Transmit UDP packet to the LED Controller(s)
+        payload = protocol.pack_payload(
+            protocol.parse_mode(mode),
+            protocol.parse_rate(rate),
+            protocol.parse_color(color),
+            protocol.parse_brightness(brightness))
         udp_controller.send(payload)
+    else:
+        # Default values
+        mode = "solid"
+        color = "#ff0000"
+        rate = 0xFF
+        brightness = 128
 
-    # TODO data persistence on webpage
     return render_template('ledcontroller.html',
-                            modes=MODE_LABELS, current_mode="chaser",
-                            rate = 2)
+                            modes=MODE_LABELS,
+                            current_mode=mode,
+                            color=color,
+                            rate=rate,
+                            brightness=brightness)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8000)
