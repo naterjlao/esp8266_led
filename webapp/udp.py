@@ -16,7 +16,7 @@ class UDPMulticastIO:
 if __name__ == "__main__":
     IP = "239.1.1.1"
     PORT = 4000
-    INTERFACE = "192.168.4.35"
+    INTERFACE = "192.168.4.70"
     # NOTE: interface dependent on host machine
     # ref https://stackoverflow.com/questions/8437726/can-python-select-what-network-adapter-when-opening-a-socket
     
