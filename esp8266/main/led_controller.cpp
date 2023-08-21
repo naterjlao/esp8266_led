@@ -51,16 +51,14 @@ void LED::Controller::receive(const PROTOCOL::PAYLOAD& payload)
     // Verify Message ID
     if (PROTOCOL::MESSAGE_ID == message_id)
     {
-#if 1
-        Serial.println(mode_cmd);
-        Serial.println(rate);
-        Serial.println(rgba);
-        // testing playground
-        this->settings.color = CRGB::Amethyst;
-        this->settings.brightness = 0xFF;
-        this->setMode(PROTOCOL::BREATHE);
-#endif
-        /// @todo set settings and mode
+        // Set Mode and Settings
+        this->settings.rate = rate;
+        this->settings.brightness = rgba & 0xFF;
+        const uint8_t red = (rgba >> 24) & 0xFF;
+        const uint8_t green = (rgba >> 16) & 0xFF;
+        const uint8_t blue = (rgba >> 8) & 0xFF;
+        this->settings.color = CRGB(red, green, blue);
+        this->setMode(mode_cmd);
     }
 }
 
