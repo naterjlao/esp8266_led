@@ -27,7 +27,7 @@ LED::Controller *controller = 0;
 
 // ----- MAIN FUNCTION IMPLEMENTATION ----- //
 
-/// @brief 
+/// @brief
 void setup()
 {
     // Serial output
@@ -42,7 +42,7 @@ void setup()
     controller = new LED::Controller(NUM_LEDS);
 }
 
-/// @brief 
+/// @brief
 void loop()
 {
     // Receive UDP payloads
@@ -59,8 +59,8 @@ void loop()
 
 // ----- PRIVATE FUNCTION IMPLEMENTATION ----- //
 
-/// @brief 
-/// @return 
+/// @brief Configures WiFi setttings for the ESP8266
+/// @return
 static bool setup_wifi()
 {
     bool status = true;

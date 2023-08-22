@@ -4,6 +4,8 @@
 
 // ----- PUBLIC FUNCTION IMPLEMENTATION ----- //
 
+/// @brief Allocates the LED Controller object.
+/// @param nLeds 
 LED::Controller::Controller(const int nLeds)
 {
     memset(&settings, 0, sizeof(settings));
@@ -39,26 +41,26 @@ LED::Controller::Controller(const int nLeds)
 }
 
 /// @brief Parses the received payload and sets LED Controller settings based on the user request.
-/// @param payload 
-void LED::Controller::receive(const PROTOCOL::PAYLOAD& payload)
+/// @param payload
+void LED::Controller::receive(const PROTOCOL::PAYLOAD &payload)
 {
-    /// @note the ESP8266 architecture is little-endian, byte-swapping is necessary
-    const uint32_t message_id = __ntohl(payload.message_id);
-    const PROTOCOL::MODES mode_cmd = payload.mode_cmd; // no byte-swap, 8-bit field
-    const uint16_t rate = __ntohs(payload.rate);
-    const uint32_t rgba = __ntohl(payload.rgba);
-
     // Verify Message ID
-    if (PROTOCOL::MESSAGE_ID == message_id)
+    /// @note the ESP8266 architecture is little-endian, byte-swapping is necessary
+    if (PROTOCOL::MESSAGE_ID == __ntohl(payload.message_id))
     {
-        // Set Mode and Settings
-        this->settings.rate = rate;
+        // Set Rate
+        this->settings.rate = __ntohs(payload.rate);
+
+        // Set Brightness and RGB
+        const uint32_t rgba = __ntohl(payload.rgba);
         this->settings.brightness = rgba & 0xFF;
         const uint8_t red = (rgba >> 24) & 0xFF;
         const uint8_t green = (rgba >> 16) & 0xFF;
         const uint8_t blue = (rgba >> 8) & 0xFF;
         this->settings.color = CRGB(red, green, blue);
-        this->setMode(mode_cmd);
+
+        // Set Mode
+        this->setMode(payload.mode_cmd); // no byte-swap, 8-bit field
     }
 }
 
@@ -70,7 +72,8 @@ void LED::Controller::render(void)
         // Invoke the Current Mode Function
         this->mode(this->leds, this->settings, this->mode_change);
         // Render LED Output
-        if (this->refresh) FastLED.show();
+        if (this->refresh)
+            FastLED.show();
         // For solid mode, don't refresh all the time
         this->refresh = this->mode != LED::mode_solid;
     }

@@ -70,19 +70,21 @@ void LED::mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_chang
         mode_change = false;
         frame = 0;
     }
+
+    /// @todo magic number
+    /// @todo figure out rate-counter
     if (frame == 100)
     {
         color = LED::COLORS[color_idx];
         set_all_leds(leds, settings.nLeds, color);
         ++color_idx;
-        color_idx = color_idx % 6;
+        color_idx = color_idx % (sizeof(LED::COLORS) / sizeof(CRGB));
         frame = 0;
     }
     else
     {
         ++frame;
     }
-    /// @todo
 }
 
 /// @brief LED Breathe+Cycle Mode. All LEDs change colors and brightness increases and decreases.
@@ -116,20 +118,20 @@ void LED::mode_breathe_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mo
     // Set Brightness
     FastLED.setBrightness(brightness);
 
+    /// @todo magic number
+    /// @todo figure out rate-counter
     if (frame == 100)
     {
         color = LED::COLORS[color_idx];
         set_all_leds(leds, settings.nLeds, color);
         ++color_idx;
-        color_idx = color_idx % 6;
+        color_idx = color_idx % (sizeof(LED::COLORS) / sizeof(CRGB));
         frame = 0;
     }
     else
     {
         ++frame;
     }
-
-    /// @todo
 }
 
 /// @brief LED Chaser Mode. A section of LEDs "travels" across the LED strip.
