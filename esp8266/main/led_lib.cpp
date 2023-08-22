@@ -32,25 +32,35 @@ void LED::mode_solid(CRGB *leds, const LED::SETTINGS &settings, bool &mode_chang
 /// @param mode_change Mode Change Flag
 void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
+    static uint16_t frame = 0;
     static uint8_t brightness = 0x0;
     static bool increment = true;
     if (mode_change)
     {
         // First call - reset brightness back to zero and set color
+        frame = 0;
         brightness = 0x0;
         increment = true;
         set_all_leds(leds, settings.nLeds, settings.color);
         mode_change = false;
     }
 
-    /// @todo figure out rate-counter
-    // Increase and Decrease Brightness
-    brightness += increment ? 1 : -1;
-    increment = (brightness == 0x00) ? true : increment;
-    increment = (brightness == 0xFF) ? false : increment;
+    /// @todo clean this up - the intent is to use a frame limit of 4 as slowest and invert the rate interval
+    if (frame == ((0xFFFF - settings.rate) / (0xFFFF / 4)))
+    {
+        // Increase and Decrease Brightness
+        brightness += increment ? 1 : -1;
+        increment = (brightness == 0x00) ? true : increment;
+        increment = (brightness == 0xFF) ? false : increment;
 
-    // Set Brightness
-    FastLED.setBrightness(brightness);
+        // Set Brightness
+        FastLED.setBrightness(brightness);
+        frame = 0;
+    }
+    else
+    {
+        ++frame;
+    }
 }
 
 /// @brief LED Cycle Mode. All LEDs change colors but brightness is static.
