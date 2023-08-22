@@ -60,24 +60,28 @@ void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_cha
 void LED::mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
     static CRGB color;
-    static int color_idx; 
+    static int color_idx;
     static int frame;
     if (mode_change)
     {
-    FastLED.setBrightness(settings.brightness);
-    // First call - reset brightness back to zero and set color
-    color_idx = 0;
-    mode_change = false;
-    frame = 0; 
+        FastLED.setBrightness(settings.brightness);
+        // First call - reset brightness back to zero and set color
+        color_idx = 0;
+        mode_change = false;
+        frame = 0;
     }
     if (frame == 100)
-    {color = LED::COLORS[color_idx];
-    set_all_leds(leds, settings.nLeds, color);
-    ++color_idx; 
-    color_idx = color_idx %6;
-    frame = 0; 
+    {
+        color = LED::COLORS[color_idx];
+        set_all_leds(leds, settings.nLeds, color);
+        ++color_idx;
+        color_idx = color_idx % 6;
+        frame = 0;
     }
-    else{++frame;}
+    else
+    {
+        ++frame;
+    }
     /// @todo
 }
 
@@ -87,6 +91,44 @@ void LED::mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_chang
 /// @param mode_change Mode Change Flag
 void LED::mode_breathe_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
+    static uint8_t brightness = 0x0;
+    static bool increment = true;
+    static CRGB color;
+    static int color_idx;
+    static int frame;
+    if (mode_change)
+    {
+        // First call - reset brightness back to zero and set color
+        brightness = 0x0;
+        increment = true;
+        set_all_leds(leds, settings.nLeds, settings.color);
+        mode_change = false;
+        color_idx = 1;
+        frame = 1;
+    }
+
+    /// @todo figure out rate-counter
+    // Increase and Decrease Brightness
+    brightness += increment ? 1 : -1;
+    increment = (brightness == 0x00) ? true : increment;
+    increment = (brightness == 0xFF) ? false : increment;
+
+    // Set Brightness
+    FastLED.setBrightness(brightness);
+
+    if (frame == 100)
+    {
+        color = LED::COLORS[color_idx];
+        set_all_leds(leds, settings.nLeds, color);
+        ++color_idx;
+        color_idx = color_idx % 6;
+        frame = 0;
+    }
+    else
+    {
+        ++frame;
+    }
+
     /// @todo
 }
 
