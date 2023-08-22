@@ -59,6 +59,25 @@ void LED::mode_breathe(CRGB *leds, const LED::SETTINGS &settings, bool &mode_cha
 /// @param mode_change Mode Change Flag
 void LED::mode_cycle(CRGB *leds, const LED::SETTINGS &settings, bool &mode_change)
 {
+    static CRGB color;
+    static int color_idx; 
+    static int frame;
+    if (mode_change)
+    {
+    FastLED.setBrightness(settings.brightness);
+    // First call - reset brightness back to zero and set color
+    color_idx = 0;
+    mode_change = false;
+    frame = 0; 
+    }
+    if (frame == 100)
+    {color = LED::COLORS[color_idx];
+    set_all_leds(leds, settings.nLeds, color);
+    ++color_idx; 
+    color_idx = color_idx %6;
+    frame = 0; 
+    }
+    else{++frame;}
     /// @todo
 }
 
