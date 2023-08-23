@@ -22,7 +22,7 @@ char input_buffer[1024];
 static bool setup_wifi();
 
 // LED Controller Variables
-#define NUM_LEDS 150
+#define NUM_LEDS 139
 LED::Controller *controller = 0;
 
 // ----- MAIN FUNCTION IMPLEMENTATION ----- //
