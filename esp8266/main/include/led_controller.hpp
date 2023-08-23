@@ -8,7 +8,7 @@
 namespace LED
 {
     /// @note this must be changed according to hardware
-    const int DATA_PIN = 15;
+    const int DATA_PIN = 16;
 
     class Controller
     {
