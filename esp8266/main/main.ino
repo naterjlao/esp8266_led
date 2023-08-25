@@ -10,8 +10,8 @@
 
 // UDP Ethernet Variables
 /// @note TOP SECRET
-const char *ssid = "lao-mesh";
-const char *passwd = "11531Seneca!";
+const char *ssid = "REDACTED";
+const char *passwd = "REDACTED";
 WiFiUDP udp;
 
 // UDP Multicast Receive on 239.1.1.1:4000
