@@ -68,7 +68,7 @@ static bool setup_wifi()
     // Setup network configuration
     WiFi.mode(WIFI_STA);               // Station Mode (network client)
     wifi_set_sleep_type(NONE_SLEEP_T); // reference https://arduino.stackexchange.com/questions/39957/esp8266-udp-multicast-doesnt-receive-packets
-    WiFi.setOutputPower(0);            // Set WiFi output power to off - only receive
+    WiFi.setOutputPower(10.0);         // Depending on location, this may need to be increased
 
     // Connect to network
     WiFi.begin(ssid, passwd);

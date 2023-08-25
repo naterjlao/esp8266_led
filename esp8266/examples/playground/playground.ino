@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
-#define NUM_LEDS 300
-#define DATA_PIN 15
+#define NUM_LEDS 139
+#define DATA_PIN 16
 #define DELAY 30
 CRGB leds[NUM_LEDS];
 static const CRGB COLORS[] = {
