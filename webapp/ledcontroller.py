@@ -1,5 +1,7 @@
 import protocol
 import udp
+import threading
+import time
 
 from flask import Flask
 from flask import render_template
@@ -23,6 +25,7 @@ IP = "239.1.1.1"
 PORT = 4000
 INTERFACE = "192.168.4.70"
 udp_controller = udp.UDPMulticastIO(IP, PORT, INTERFACE)
+payload = None
 
 @app.route('/')
 def index():
@@ -36,13 +39,8 @@ def ledcontroller():
         rate = request.form['rate']
         brightness = request.form['brightness']
 
-        # testing
-        print(mode)
-        print(color)
-        print(rate)
-        print(brightness)
-
         # Transmit UDP packet to the LED Controller(s)
+        global payload
         payload = protocol.pack_payload(
             protocol.parse_mode(mode),
             protocol.parse_rate(rate),
@@ -63,5 +61,16 @@ def ledcontroller():
                             rate=rate,
                             brightness=brightness)
 
+def udp_tx_thread():
+    # periodically send UDP messages over time
+    # to synchronize mulitple controllers 
+    while True:
+        global payload
+        if payload is not None:
+            udp_controller.send(payload)
+            time.sleep(60 * 60) # 60 secs x 60 minutes = 1 hour
+
 if __name__ == '__main__':
+    tx_thread = threading.Thread(target=udp_tx_thread, daemon=True)
+    tx_thread.start()
     app.run(debug=True, host="0.0.0.0", port=8000)
