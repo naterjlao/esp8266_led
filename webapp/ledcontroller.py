@@ -25,6 +25,12 @@ IP = "239.1.1.1"
 PORT = 4000
 INTERFACE = "192.168.4.70"
 udp_controller = udp.UDPMulticastIO(IP, PORT, INTERFACE)
+
+# Static fields - default values
+mode = "solid"
+color = "#ff0000"
+rate = 0xFF
+brightness = 128
 payload = None
 
 @app.route('/')
@@ -33,6 +39,12 @@ def index():
 
 @app.route('/ledcontroller', methods = ['POST', 'GET'])
 def ledcontroller():
+    global mode
+    global color
+    global rate
+    global brightness
+    global payload
+
     if request.method == 'POST':
         mode = request.form['mode']
         color = request.form['color']
@@ -40,20 +52,12 @@ def ledcontroller():
         brightness = request.form['brightness']
 
         # Transmit UDP packet to the LED Controller(s)
-        global payload
         payload = protocol.pack_payload(
             protocol.parse_mode(mode),
             protocol.parse_rate(rate),
             protocol.parse_color(color),
             protocol.parse_brightness(brightness))
-        udp_controller.send(payload)
-    else:
-        # Default values
-        mode = "solid"
-        color = "#ff0000"
-        rate = 0xFF
-        brightness = 128
-
+        udp_controller.send(payload)        
     return render_template('ledcontroller.html',
                             modes=MODE_LABELS,
                             current_mode=mode,
